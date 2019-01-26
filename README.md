@@ -60,6 +60,9 @@ List of 300 VueJS Interview Questions
 |51 | [What are the different ways to create filters?](#what-are-the-different-ways-to-create-filters)|
 |52 | [How do you chain filters](#how-do-you-chain-filters)|
 |53 | [Is it possible to pass parameters for filters?](#is-it-possible-to-pass-parameters-for-filters)|
+|54 | [What are plugins and their various services?](#what-are-plugins-and-their-various-services)|
+|55 | [ How to create a plugin?](#how-to-create-a-plugin)|
+|56 | [How to use a plugin?](#how-to-use-a-plugin)|
 
 1.  ### What is VueJS?
     Vue.js is an open-source, progressive Javascript framework for building user interfaces that aim to be incrementally adoptable. The core library of VueJS is focused on the view layer only, and is easy to pick up and integrate with other libraries or existing projects.
@@ -1177,4 +1180,53 @@ List of 300 VueJS Interview Questions
      For example, you can find the exponential strength of a particular value
      ```javascript
      {{ 2 | exponentialStrength(10) }} // prints 2 power 10 = 1024
+     ```
+54.  ### What are plugins and their various services?
+
+     Plugins provides global-level functionality to Vue application. The plugins provides various services,
+     1. Add some global methods or properties. For example, vue-custom-element
+     2. Add one or more global assets (directives, filters and transitions). For example, vue-touch
+     3. Add some component options by global mixin. For example, vue-router
+     4. Add some Vue instance methods by attaching them to Vue.prototype.
+     5. A library that provides an API of its own, while at the same time injecting some combination of the above. For example, vue-router
+55.  ### How to create a plugin?
+     The Plugin is created by exposing an install method which takes Vue constructor as a first argument along with options. The structure of VueJS plugin with possible functionality would be as follows,
+      ```javascript
+      MyPlugin.install = function (Vue, options) {
+        // 1. add global method or property
+        Vue.myGlobalMethod = function () {
+          // some logic ...
+        }
+
+        // 2. add a global asset
+        Vue.directive('my-directive', {
+          bind (el, binding, vnode, oldVnode) {
+            // some logic ...
+          }
+          ...
+        })
+
+        // 3. inject some component options
+        Vue.mixin({
+          created: function () {
+            // some logic ...
+          }
+          ...
+        })
+
+        // 4. add an instance method
+        Vue.prototype.$myMethod = function (methodOptions) {
+          // some logic ...
+        }
+      }
+      ```
+56.  ### How to use a plugin?
+     You can use plugin by passing your plugin to Vue's **use** global method. You need to apply this method before start your app by calling new Vue().
+     ```javascript
+     // calls `MyPlugin.install(Vue, { someOption: true })`
+     Vue.use(MyPlugin)
+
+     new Vue({
+       //... options
+     })
      ```
